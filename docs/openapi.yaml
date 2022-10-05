@@ -1,0 +1,240 @@
+openapi: 3.0.1
+info:
+  title: Json config API
+  version: 1.0.0
+servers:
+  - url: "/"
+
+
+paths:
+
+  /api/v1/config:
+    get:
+      tags:
+        - Products
+      parameters:
+        - $ref: '#/components/parameters/loadLanguages'
+        - $ref: '#/components/parameters/loadMappingTemplates'
+        - $ref: '#/components/parameters/loadParticipantMappingTemplates'
+        - $ref: '#/components/parameters/loadSiteNavigations'
+        - $ref: '#/components/parameters/loadDayPageTemplates'
+        - $ref: '#/components/parameters/sort'
+      summary: "List of products"
+      responses:
+        "200":
+          description: "Products"
+          content:
+            application/json:
+              config:
+                $ref: '#/components/configs/products'
+  
+  /api/v1/config/{id}:
+    get:
+      tags:
+        - Products
+      summary: "Get a product"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: "The product ID"
+          config:
+            type: string
+        - $ref: '#/components/parameters/loadLanguages'
+        - $ref: '#/components/parameters/loadMappingTemplates'
+        - $ref: '#/components/parameters/loadParticipantMappingTemplates'
+        - $ref: '#/components/parameters/loadSiteNavigations'
+        - $ref: '#/components/parameters/loadDayPageTemplates'
+      responses:
+        "200":
+          description: "Product"
+          content:
+            application/json:
+              config:
+                $ref: '#/components/configs/products'
+        "400":
+          $ref: '#/components/responses/400'
+        "404":
+          $ref: '#/components/responses/404'
+    put:
+      tags:
+        - Products
+      summary: "Update a product"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: "The product ID"
+          config:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            config:
+              $ref: '#/components/configs/productUpdate'
+        required: true
+      responses:
+        "200":
+          description: "Updated product"
+          content:
+            application/json:
+              config:
+                $ref: '#/components/configs/productRead'
+        "400":
+          $ref: '#/components/responses/400'
+        "404":
+          $ref: '#/components/responses/404'
+
+  /api/v1/config/{id}/validate:
+    post:
+      tags:
+        - Products
+      summary: "Update a product"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: "The product ID"
+          config:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            config:
+              $ref: '#/components/configs/productUpdate'
+        required: true
+      responses:
+        "200":
+          description: "Updated product"
+          content:
+            application/json:
+              config:
+                $ref: '#/components/configs/productRead'
+        "400":
+          $ref: '#/components/responses/400'
+        "404":
+          $ref: '#/components/responses/404'
+
+  /healthcheck:
+    get:
+      tags:
+        - Utils
+        - Healthcheck
+      summary: "Shows a simple healthcheck"
+      responses:
+        "200":
+          description: "The healthcheck was successful"
+          content:
+            text/plain:
+              config:
+                type: string
+                example: ok
+        "500":
+          description: "The healthcheck failed"
+          content:
+            text/plain:
+              config:
+                type: string
+                example: fail
+  
+  /healthpage:
+    get:
+      tags:
+        - Utils
+        - Healthcheck
+      summary: "Shows a full healthcheck"
+      responses:
+        "200":
+          description: "Shows a html page with full healthcheck"
+
+
+components:
+
+  parameters:
+    limit:
+      name: limit
+      in: query
+      required: false
+      description: Limit the number of entities returned
+      config:
+        type: integer
+        minimum: 0
+        maximum: 5000
+        default: 100
+    offset:
+      name: offset
+      in: query
+      required: false
+      description: Offset for the result list
+      config:
+        type: integer
+        minimum: 0
+        default: 0
+    
+  responses:
+    400:
+      description: "Invalid parameters or request body"
+      content:
+        application/json:
+          config:
+            $ref: '#/components/configs/error'
+    404:
+      description: "An item with the given id was not found"
+      content:
+        application/json:
+          config:
+            $ref: '#/components/configs/error'
+
+  configs:
+    uniquelyIdentified:
+      type: object
+      properties:
+        id:
+          description: "A unique identifier of the entity"
+          readOnly: true
+          type: integer
+          minimum: 0
+          exclusiveMinimum: true
+          example: 1
+    reference:
+      type: object
+      properties:
+        id:
+          description: "A unique identifier of the entity"
+          type: integer
+          minimum: 0
+          exclusiveMinimum: true
+          example: 1
+    collectionMeta:
+      type: object
+      required:
+        - totalCount
+      properties:
+        totalCount:
+          description: "Total count of found items after applying the filters but not applying pagination"
+          type: integer
+          example: 150
+    error:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          description: "Description of the error state"
+          type: string
+          example: "The item with id 1000 was not found"
+        urlNameDuplicates:
+          description: "List of duplicates"
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                example: 34
+              fullUrlName:
+                type: string
+                example: "soccer"
+              createdAt:
+                type: integer
+                example: 1579696084000

@@ -13,3 +13,15 @@
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
+
+.idea/
+PullAdminTool.log
+.DS_Store
+database/*.mwb.bak
+config-api
+/*.exe
+.vscode/*
+!.vscode/launch.json
+build
+__debug_bin
+

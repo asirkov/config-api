@@ -1,0 +1,18 @@
+= Config API Release Notes
+:toc-title: Versions
+:toc: left
+:icons: font
+:sectanchors:
+
+[NOTE]
+====
+See link:/api/v1/docs[Documentation here].
+====
+
+'''
+
+== [2.24.0] yyyy-mm-dd
+
+=== Added
+
+* TBD

@@ -1,0 +1,21 @@
+database:
+  uri: ""
+  database: "jsonconfig"
+
+collection:
+  config: "config"
+    
+logging:
+  logLevel: "INFO"
+  consoleEnabled: true
+  logFilesEnabled: false
+  logFilesDestination: /tmp/
+  maxSize: 5         # Max file size in megabytes to rotate
+  maxAge: 30         # Max age of files in days
+  maxBackups: 200    # Max count of files
+
+server:
+  port: 8011
+
+health:
+  port: 8012
